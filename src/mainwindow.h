@@ -3,7 +3,7 @@
 
 #include "ui_mainwindow.h"
 
-class MainWindow : public QMainWindow
+class MainWindow final : public QMainWindow
 {
 public:
     explicit MainWindow(QWidget *pWgt = nullptr);

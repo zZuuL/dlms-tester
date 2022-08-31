@@ -1,6 +1,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 
+//---------------------------------------------------------------------------//
 
 int main (int argc, char **argv)
 {
@@ -9,3 +10,5 @@ int main (int argc, char **argv)
     mw->show();
     return app.exec();
 }
+
+//---------------------------------------------------------------------------//
