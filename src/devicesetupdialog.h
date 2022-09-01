@@ -1,21 +1,21 @@
-#ifndef __adddevicewindow_H
-#define __adddevicewindow_H
+#ifndef __devicesetupdialog_H
+#define __devicesetupdialog_H
 
-#include "ui_adddevicewindow.h"
+#include "ui_devicesetupdialog.h"
 
 //---------------------------------------------------------------------------//
 
-class AddDeviceWindow final : public QDialog
+class DeviceSetupDialog final : public QDialog
 {
 public:
-    explicit AddDeviceWindow(QWidget* pWgt /*= 0*/);
+    explicit DeviceSetupDialog(QWidget* pWgt /*= 0*/);
 
 private:
-    Ui::AddDeviceWindow ui_;
+    Ui::DeviceSetupDialog ui_;
 };
 
 //---------------------------------------------------------------------------//
 
 
 
-#endif /*__adddevicewindow_H*/
+#endif /*__devicesetupdialog_H*/

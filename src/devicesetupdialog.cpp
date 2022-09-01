@@ -1,8 +1,8 @@
-#include "adddevicewindow.h"
+#include "devicesetupdialog.h"
 
 //---------------------------------------------------------------------------//
 
-AddDeviceWindow::AddDeviceWindow(QWidget* pWgt /*= 0*/)
+DeviceSetupDialog::DeviceSetupDialog(QWidget* pWgt /*= 0*/)
     : QDialog(pWgt)
 {
     ui_.setupUi(this);
