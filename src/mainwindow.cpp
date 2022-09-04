@@ -6,8 +6,12 @@
 MainWindow::MainWindow(QWidget *pWgt /*= nullptr*/)
     : QMainWindow(pWgt)
 {
-    DeviceSetupDialog d(this); d.exec();
+    DeviceSetting setting;
+
     ui.setupUi(this);
+    DeviceSetupDialog d(setting, this);
+    d.exec();
 }
+
 
 //---------------------------------------------------------------------------//

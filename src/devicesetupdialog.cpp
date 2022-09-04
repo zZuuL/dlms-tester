@@ -1,11 +1,21 @@
 #include "devicesetupdialog.h"
+#include "devicesetting.h"
 
 //---------------------------------------------------------------------------//
 
-DeviceSetupDialog::DeviceSetupDialog(QWidget* pWgt /*= 0*/)
-    : QDialog(pWgt)
+
+DeviceSetupDialog::DeviceSetupDialog(const DeviceSetting &setting, QWidget* pWgt /*= 0*/)
+    : DeviceSetupDialogBase(pWgt)
+{}
+
+//---------------------------------------------------------------------------//
+
+DeviceSetting DeviceSetupDialog::get() const
 {
-    ui_.setupUi(this);
+    DeviceSetting result;
+    return result;
 }
 
+
 //---------------------------------------------------------------------------//
+

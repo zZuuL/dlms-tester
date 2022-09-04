@@ -1,14 +1,16 @@
 #ifndef __devicesetupdialog_H
 #define __devicesetupdialog_H
 
-#include "ui_devicesetupdialog.h"
+#include "devicesetting.h"
+#include "devicesetupdialogbase.h"
 
 //---------------------------------------------------------------------------//
 
-class DeviceSetupDialog final : public QDialog
+class DeviceSetupDialog final : public DeviceSetupDialogBase
 {
 public:
-    explicit DeviceSetupDialog(QWidget* pWgt /*= 0*/);
+    explicit DeviceSetupDialog(const DeviceSetting &setting, QWidget* pWgt = 0);
+    DeviceSetting get() const;
 
 private:
     Ui::DeviceSetupDialog ui_;
