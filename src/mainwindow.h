@@ -1,15 +1,12 @@
 #ifndef __mainwindow_H
 #define __mainwindow_H
 
-#include "ui_mainwindow.h"
+#include "mainwindowbase.h"
 
-class MainWindow final : public QMainWindow
+class MainWindow final : public MainWindowBase
 {
 public:
     explicit MainWindow(QWidget *pWgt = nullptr);
-
-private:
-    Ui::MainWindow ui{};
 };
 
 #endif /*__mainwindow_H*/

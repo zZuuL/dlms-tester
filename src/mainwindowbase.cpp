@@ -1,11 +1,11 @@
-#include "mainwindow.h"
-#include "devicesetupdialog.h"
+#include "mainwindowbase.h"
 
 //---------------------------------------------------------------------------//
 
-MainWindow::MainWindow(QWidget *pWgt /*= nullptr*/)
-    : MainWindowBase(pWgt)
-{}
-
+MainWindowBase::MainWindowBase(QWidget *pWgt/* = 0*/)
+{
+    ui_.setupUi(this);
+}
 
 //---------------------------------------------------------------------------//
+
