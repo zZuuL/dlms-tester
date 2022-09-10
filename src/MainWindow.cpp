@@ -10,20 +10,40 @@
 MainWindow::MainWindow(QWidget *pWgt /*= nullptr*/)
     : MainWindowBase(pWgt)
 {
-    DeviceSetting s;
-    DeviceSetupDialog d(s);
-    d.exec();
 }
 
 
 //---------------------------------------------------------------------------//
 
 
-//void MainWindow::addDevice()
-//{
-//
-//}
+bool MainWindow::init()
+{
+    return true;
+}
 
+
+//---------------------------------------------------------------------------//
+
+
+bool MainWindow::fini()
+{
+    return true;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+void MainWindow::adddevice()
+{
+    DeviceSetupDialog device_setup_dialog;
+
+    if (device_setup_dialog.exec() == QDialog::Accepted)
+    {
+        DeviceSetting settings = device_setup_dialog.get();
+    }
+
+}
 
 
 //---------------------------------------------------------------------------//

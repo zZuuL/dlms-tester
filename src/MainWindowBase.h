@@ -4,6 +4,9 @@
 #include "ui_MainWindow.h"
 
 
+#include <QActionGroup>
+
+
 //---------------------------------------------------------------------------//
 
 class MainWindowBase : public QMainWindow
@@ -13,8 +16,16 @@ class MainWindowBase : public QMainWindow
 public:
     explicit MainWindowBase(QWidget *pWgt = 0);
 
-private:
+    virtual bool init() = 0;
+    virtual bool fini() = 0;
+    virtual void adddevice() =0;
+
+private slots:
+    void actionHandler(const QAction* action);
+
+protected:
     Ui::MainWindow ui_;
+    QActionGroup   actions_;
 };
 
 

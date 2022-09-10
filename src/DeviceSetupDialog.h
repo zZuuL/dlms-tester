@@ -9,7 +9,7 @@
 class DeviceSetupDialog final : public DeviceSetupDialogBase
 {
 public:
-    explicit DeviceSetupDialog(const DeviceSetting &setting = DeviceSetting(), QWidget* pWgt = 0);
+    explicit DeviceSetupDialog(QWidget* pWgt = 0, const DeviceSetting &setting = DeviceSetting());
     DeviceSetting get() const;
 
 private:

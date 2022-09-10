@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------//
 
 
-DeviceSetupDialog::DeviceSetupDialog(const DeviceSetting &setting /*= DeviceSetting()*/, QWidget* pWgt /*= 0*/)
+DeviceSetupDialog::DeviceSetupDialog(QWidget* pWgt /*= 0*/, const DeviceSetting &setting /*= DeviceSetting()*/)
     : DeviceSetupDialogBase(pWgt)
 {
     DeviceSetupDialogBase::setName(setting.name);

@@ -6,28 +6,81 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>844</width>
+    <height>558</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dlms tester</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget">
+       <column>
+        <property name="text">
+         <string>Devices</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabPosition">
+        <enum>QTabWidget::South</enum>
+       </property>
+       <property name="tabShape">
+        <enum>QTabWidget::Rounded</enum>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Info</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Log</string>
+        </attribute>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>29</height>
+     <width>844</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="action_Adddevice"/>
+    <addaction name="action_AddDevice"/>
     <addaction name="separator"/>
     <addaction name="action_Close"/>
    </widget>
@@ -37,7 +90,15 @@
     </property>
     <addaction name="action_AboutQt"/>
    </widget>
+   <widget class="QMenu" name="menuDevice">
+    <property name="title">
+     <string>Device</string>
+    </property>
+    <addaction name="action_DeviceConnect"/>
+    <addaction name="action_DeviceDisconnect"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuDevice"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -51,64 +112,22 @@
     <string>About Qt</string>
    </property>
   </action>
-  <action name="action_Adddevice">
+  <action name="action_AddDevice">
    <property name="text">
     <string>Add device</string>
    </property>
   </action>
+  <action name="action_DeviceConnect">
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </action>
+  <action name="action_DeviceDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>action_AboutQt</sender>
-   <signal>changed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>actionHandler()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_Adddevice</sender>
-   <signal>changed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>actionHandler()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_Close</sender>
-   <signal>changed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>actionHandler()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
- <slots>
-  <slot>actionHandler()</slot>
- </slots>
+ <connections/>
 </ui>
