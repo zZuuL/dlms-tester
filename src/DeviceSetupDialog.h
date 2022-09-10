@@ -1,8 +1,8 @@
 #ifndef __devicesetupdialog_H
 #define __devicesetupdialog_H
 
-#include "devicesetting.h"
-#include "devicesetupdialogbase.h"
+#include "DeviceSetting.h"
+#include "DeviceSetupDialogBase.h"
 
 //---------------------------------------------------------------------------//
 

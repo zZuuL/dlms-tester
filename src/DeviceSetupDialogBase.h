@@ -1,7 +1,7 @@
 #ifndef __devicesetupdialogbase_H
 #define __devicesetupdialogbase_H
 
-#include "devicesetting.h"
+#include "DeviceSetting.h"
 #include "ui_devicesetupdialog.h"
 
 

@@ -4,8 +4,8 @@
 #include <string>
 #include <cstdint>
 
-#include "hdlc.h"
-#include "dlms.h"
+#include "HDLC.h"
+#include "DLMS.h"
 
 
 //---------------------------------------------------------------------------//

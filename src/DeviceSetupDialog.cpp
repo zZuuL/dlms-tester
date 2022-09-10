@@ -1,5 +1,4 @@
-#include "devicesetupdialog.h"
-#include "devicesetting.h"
+#include "DeviceSetupDialog.h"
 
 //---------------------------------------------------------------------------//
 

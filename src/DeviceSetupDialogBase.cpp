@@ -1,4 +1,4 @@
-#include "devicesetupdialogbase.h"
+#include "DeviceSetupDialogBase.h"
 
 //---------------------------------------------------------------------------//
 

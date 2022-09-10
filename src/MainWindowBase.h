@@ -13,9 +13,6 @@ class MainWindowBase : public QMainWindow
 public:
     explicit MainWindowBase(QWidget *pWgt = 0);
 
-private slots:
-    void actionHandler();
-
 private:
     Ui::MainWindow ui_;
 };

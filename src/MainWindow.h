@@ -1,12 +1,13 @@
 #ifndef __mainwindow_H
 #define __mainwindow_H
 
-#include "mainwindowbase.h"
+#include "MainWindowBase.h"
 
-class MainWindow final : public MainWindowBase
+class MainWindow : public MainWindowBase
 {
 public:
     explicit MainWindow(QWidget *pWgt = nullptr);
+    //void addDevice() override;
 };
 
 #endif /*__mainwindow_H*/

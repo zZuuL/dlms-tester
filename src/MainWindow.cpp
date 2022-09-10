@@ -1,5 +1,9 @@
-#include "mainwindow.h"
-#include "devicesetupdialog.h"
+#include "MainWindow.h"
+#include "DeviceSetupDialog.h"
+
+
+#include <QDebug>
+
 
 //---------------------------------------------------------------------------//
 
@@ -10,6 +14,16 @@ MainWindow::MainWindow(QWidget *pWgt /*= nullptr*/)
     DeviceSetupDialog d(s);
     d.exec();
 }
+
+
+//---------------------------------------------------------------------------//
+
+
+//void MainWindow::addDevice()
+//{
+//
+//}
+
 
 
 //---------------------------------------------------------------------------//
