@@ -1,12 +1,18 @@
 #include "MainWindowBase.h"
 
+#include <QCloseEvent>
+
 
 //---------------------------------------------------------------------------//
 
+
+Q_DECLARE_METATYPE(DeviceSetting)
+
+
 MainWindowBase::MainWindowBase(QWidget *pWgt/* = 0*/)
     : QMainWindow(pWgt)
-
     , actions_(this)
+    , changed(false)
 {
     ui_.setupUi(this);
 
@@ -17,10 +23,19 @@ MainWindowBase::MainWindowBase(QWidget *pWgt/* = 0*/)
     actions_.addAction(ui_.action_Close);
     actions_.addAction(ui_.action_AboutQt);
     actions_.addAction(ui_.action_AddDevice);
+    actions_.addAction(ui_.action_RemoveDevice);
     actions_.addAction(ui_.action_DeviceConnect);
     actions_.addAction(ui_.action_DeviceDisconnect);
 
     QObject::connect(&actions_, &QActionGroup::triggered, this, &MainWindowBase::actionHandler);
+    QObject::connect(ui_.twDevices, &QTreeWidget::itemDoubleClicked, this, &MainWindowBase::modifySettings);
+}
+
+//---------------------------------------------------------------------------//
+
+bool MainWindowBase::isChanged() const
+{
+    return changed;
 }
 
 //---------------------------------------------------------------------------//
@@ -39,7 +54,18 @@ void MainWindowBase::actionHandler(const QAction* action)
 
     else if (action == ui_.action_AddDevice)
     {
-        adddevice();
+        DeviceSetting setting;
+        if (changeDeviceSetting(setting))
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem(ui_.twDevices);
+            setDeviceSettingItem_i(setting, item);
+
+        }
+    }
+
+    else if (action == ui_.action_RemoveDevice)
+    {
+
     }
 
     else if (action == ui_.action_DeviceConnect)
@@ -51,6 +77,38 @@ void MainWindowBase::actionHandler(const QAction* action)
     {
 
     }
+}
+
+//---------------------------------------------------------------------------//
+
+
+void MainWindowBase::setDeviceSettingItem_i(const DeviceSetting &setting, QTreeWidgetItem* item)
+{
+    changed = true;
+
+    item->setText(0, QString::fromStdString(setting.name));
+    item->setData(0, SettingDataRole, QVariant::fromValue(setting));
+}
+
+//---------------------------------------------------------------------------//
+
+void MainWindowBase::modifySettings(QTreeWidgetItem *item, int column)
+{
+    if (item != nullptr)
+    {
+        DeviceSetting setting = item->data(0, SettingDataRole).value<DeviceSetting>();
+        if (changeDeviceSetting(setting))
+            setDeviceSettingItem_i(setting, item);
+    }
+}
+
+
+//---------------------------------------------------------------------------//
+
+void MainWindowBase::closeEvent(QCloseEvent *event)
+{
+    fini();
+    event->accept();
 }
 
 //---------------------------------------------------------------------------//

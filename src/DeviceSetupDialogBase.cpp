@@ -1,3 +1,5 @@
+#include <QMessageBox>
+
 #include "DeviceSetupDialogBase.h"
 
 //---------------------------------------------------------------------------//
@@ -347,4 +349,60 @@ void DeviceSetupDialogBase::clientIdChanged()
 
 //---------------------------------------------------------------------------//
 
+bool DeviceSetupDialogBase::checkIpAddres_i() const
+{
+    const QStringList ip_parts = ui_.leIpAddress->text().split(".");
 
+    if (ip_parts.size() == 4)
+    {
+        bool isA = false;
+        bool isB = false;
+        bool isC = false;
+        bool isD = false;
+
+        const int value_A = ip_parts[0].toInt(&isA);
+        const int value_B = ip_parts[1].toInt(&isB);
+        const int value_C = ip_parts[2].toInt(&isC);
+        const int value_D = ip_parts[3].toInt(&isD);
+
+        return isA &&
+               isB &&
+               isC &&
+               isD &&
+               value_A >= 0 && value_A <= 255 &&
+               value_B >= 0 && value_B <= 255 &&
+               value_C >= 0 && value_C <= 255 &&
+               value_D >= 0 && value_D <= 255;
+    }
+
+    return false;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+void DeviceSetupDialogBase::save()
+{
+    if (ui_.leName->text().isEmpty())
+    {
+        QMessageBox::information(
+                this,
+                QString("Information"),
+                QString("Device name is empty!"));
+        return ;
+    }
+
+    if (!checkIpAddres_i())
+    {
+        QMessageBox::critical(
+                this,
+                QString("Error"),
+                QString("Invalid ip adrdess"));
+        return ;
+    }
+
+    QDialog::accept();
+}
+
+//---------------------------------------------------------------------------//

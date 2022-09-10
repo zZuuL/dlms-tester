@@ -1,8 +1,8 @@
 #include "MainWindow.h"
 #include "DeviceSetupDialog.h"
 
-
 #include <QDebug>
+#include <QMessageBox>
 
 
 //---------------------------------------------------------------------------//
@@ -27,6 +27,22 @@ bool MainWindow::init()
 
 bool MainWindow::fini()
 {
+    if (MainWindowBase::isChanged())
+    {
+        const QMessageBox::StandardButton button = QMessageBox::question(
+                this,
+                QString("Save"),
+                QString("Device schema is changed, save changes?"),
+                QMessageBox::Save | QMessageBox::Ignore,
+                QMessageBox::Save
+        );
+
+        if (button == QMessageBox::Save)
+        {
+
+        }
+    }
+
     return true;
 }
 
@@ -34,16 +50,14 @@ bool MainWindow::fini()
 //---------------------------------------------------------------------------//
 
 
-void MainWindow::adddevice()
+bool MainWindow::changeDeviceSetting(DeviceSetting &device_setting)
 {
-    DeviceSetupDialog device_setup_dialog;
-
-    if (device_setup_dialog.exec() == QDialog::Accepted)
-    {
-        DeviceSetting settings = device_setup_dialog.get();
-    }
-
+    DeviceSetupDialog setting_dialog(this, device_setting);
+    bool result = setting_dialog.exec() == QDialog::Accepted;
+    if (result)
+        device_setting = setting_dialog.get();
+    return result;
 }
 
-
 //---------------------------------------------------------------------------//
+

@@ -12,7 +12,7 @@ public:
 
     bool init() override;
     bool fini() override;
-    void adddevice() override;
+    bool changeDeviceSetting(DeviceSetting &device_setting) override;
 };
 
 

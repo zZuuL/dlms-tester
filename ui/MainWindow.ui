@@ -35,7 +35,10 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTreeWidget" name="treeWidget">
+      <widget class="QTreeWidget" name="twDevices">
+       <property name="rootIsDecorated">
+        <bool>false</bool>
+       </property>
        <column>
         <property name="text">
          <string>Devices</string>
@@ -81,6 +84,7 @@
      <string>File</string>
     </property>
     <addaction name="action_AddDevice"/>
+    <addaction name="action_RemoveDevice"/>
     <addaction name="separator"/>
     <addaction name="action_Close"/>
    </widget>
@@ -125,6 +129,11 @@
   <action name="action_DeviceDisconnect">
    <property name="text">
     <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="action_RemoveDevice">
+   <property name="text">
+    <string>Remove device</string>
    </property>
   </action>
  </widget>

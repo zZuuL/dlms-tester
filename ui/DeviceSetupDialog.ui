@@ -799,22 +799,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pbSave</sender>
-   <signal>clicked()</signal>
-   <receiver>DeviceSetupDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>494</x>
-     <y>399</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>520</x>
-     <y>209</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pbCancel</sender>
    <signal>clicked()</signal>
    <receiver>DeviceSetupDialog</receiver>
@@ -837,8 +821,8 @@
    <slot>clientIdChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>134</x>
-     <y>310</y>
+     <x>187</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>60</x>
@@ -853,8 +837,8 @@
    <slot>clientIdChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>309</y>
+     <x>263</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>75</x>
@@ -869,8 +853,8 @@
    <slot>clientIdChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>308</y>
+     <x>349</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
@@ -885,8 +869,8 @@
    <slot>clientIdChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>392</x>
-     <y>310</y>
+     <x>425</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>110</x>
@@ -894,8 +878,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pbSave</sender>
+   <signal>clicked()</signal>
+   <receiver>DeviceSetupDialog</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>413</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>clientIdChanged()</slot>
+  <slot>save()</slot>
  </slots>
 </ui>

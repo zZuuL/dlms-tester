@@ -62,8 +62,12 @@ public:
     void setIpPort(uint16_t port);
     uint16_t getIpPort() const;
 
+private:
+    bool checkIpAddres_i() const;
+
 private slots:
     void clientIdChanged();
+    void save();
 
 private:
     Ui::DeviceSetupDialog ui_;
