@@ -1,7 +1,7 @@
 #ifndef __mainwindowbase_H
 #define __mainwindowbase_H
 
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 
 //---------------------------------------------------------------------------//
