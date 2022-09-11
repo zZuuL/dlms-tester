@@ -42,18 +42,15 @@ bool MainWindowBase::isChanged() const
 
 void MainWindowBase::actionHandler(const QAction* action)
 {
-    if (action == ui_.action_AboutQt)
-    {
+    if (action == ui_.action_AboutQt) {
         QApplication::aboutQt();
     }
 
-    else if (action == ui_.action_Close)
-    {
+    else if (action == ui_.action_Close) {
         QMainWindow::close();
     }
 
-    else if (action == ui_.action_AddDevice)
-    {
+    else if (action == ui_.action_AddDevice) {
         DeviceSetting setting;
         if (changeDeviceSetting(setting))
         {
@@ -63,19 +60,16 @@ void MainWindowBase::actionHandler(const QAction* action)
         }
     }
 
-    else if (action == ui_.action_RemoveDevice)
-    {
+    else if (action == ui_.action_RemoveDevice) {
 
     }
 
-    else if (action == ui_.action_DeviceConnect)
-    {
-
+    else if (action == ui_.action_DeviceConnect) {
+        connect();
     }
 
-    else if (action == ui_.action_DeviceDisconnect)
-    {
-
+    else if (action == ui_.action_DeviceDisconnect) {
+        disconnect();
     }
 }
 
@@ -88,14 +82,15 @@ void MainWindowBase::setDeviceSettingItem_i(const DeviceSetting &setting, QTreeW
 
     item->setText(0, QString::fromStdString(setting.name));
     item->setData(0, SettingDataRole, QVariant::fromValue(setting));
+
+    ui_.twDevices->setCurrentItem(item);
 }
 
 //---------------------------------------------------------------------------//
 
 void MainWindowBase::modifySettings(QTreeWidgetItem *item, int column)
 {
-    if (item != nullptr)
-    {
+    if (item != nullptr) {
         DeviceSetting setting = item->data(0, SettingDataRole).value<DeviceSetting>();
         if (changeDeviceSetting(setting))
             setDeviceSettingItem_i(setting, item);
@@ -109,6 +104,28 @@ void MainWindowBase::closeEvent(QCloseEvent *event)
 {
     fini();
     event->accept();
+}
+
+//---------------------------------------------------------------------------//
+
+QList<DeviceSetting> MainWindowBase::getDeviceScheme() const
+{
+    QList<DeviceSetting> result;
+    for (int i = 0; i != ui_.twDevices->topLevelItemCount(); ++i) {
+        QTreeWidgetItem* item = ui_.twDevices->topLevelItem(i);
+        result << item->data(0, SettingDataRole).value<DeviceSetting>();
+    }
+    return result;
+}
+
+//---------------------------------------------------------------------------//
+
+bool MainWindowBase::getActiveDevice(DeviceSetting &setting) const
+{
+    if (QTreeWidgetItem* item = ui_.twDevices->currentItem()) {
+        setting = item->data(0, SettingDataRole).value<DeviceSetting>();
+    }
+    return false;
 }
 
 //---------------------------------------------------------------------------//

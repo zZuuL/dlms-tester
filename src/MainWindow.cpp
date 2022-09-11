@@ -39,7 +39,7 @@ bool MainWindow::fini()
 
         if (button == QMessageBox::Save)
         {
-
+            const QList<DeviceSetting> setting_s = MainWindowBase::getDeviceScheme();
         }
     }
 
@@ -61,3 +61,21 @@ bool MainWindow::changeDeviceSetting(DeviceSetting &device_setting)
 
 //---------------------------------------------------------------------------//
 
+bool MainWindow::connect()
+{
+    DeviceSetting setting;
+    if (MainWindowBase::getActiveDevice(setting))
+    {
+
+    }
+    return false;
+}
+
+//---------------------------------------------------------------------------//
+
+bool MainWindow::disconnect()
+{
+    return false;
+}
+
+//---------------------------------------------------------------------------//

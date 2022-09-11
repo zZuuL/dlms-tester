@@ -23,11 +23,15 @@ public:
     virtual bool init() = 0;
     virtual bool fini() = 0;
     virtual bool changeDeviceSetting(DeviceSetting &device_setting) = 0;
+    virtual bool connect() = 0;
+    virtual bool disconnect() = 0;
 
 protected:
     bool isChanged() const;
 
     void closeEvent(QCloseEvent *event) override;
+    bool getActiveDevice(DeviceSetting &setting) const;
+    QList<DeviceSetting> getDeviceScheme() const;
 
 private:
     void setDeviceSettingItem_i(const DeviceSetting &setting, QTreeWidgetItem* item);

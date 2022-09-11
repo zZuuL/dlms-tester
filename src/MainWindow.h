@@ -13,6 +13,9 @@ public:
     bool init() override;
     bool fini() override;
     bool changeDeviceSetting(DeviceSetting &device_setting) override;
+
+    bool connect() override;
+    bool disconnect() override;
 };
 
 
