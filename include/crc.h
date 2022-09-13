@@ -55,6 +55,20 @@ makeCrc(const uint8_t* data, size_t length)
     return fcs16;
 }
 
+
+static uint16_t
+makeCrc(const char* begin, const char* end)
+{
+    uint16_t fcs16 = 0xFFFF;
+    while (begin != end)
+        fcs16 = (fcs16 >> 8) ^ FCS16Table[(fcs16 ^ *begin++) & 0xFF];
+    fcs16 = ~fcs16;
+    fcs16 = ((fcs16 >> 8) & 0xFF) | (fcs16 << 8);
+    return fcs16;
+}
+
+
+
 }
 
 #endif /*__HDLCCRc16_H*/

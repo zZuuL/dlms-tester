@@ -1,10 +1,14 @@
 #include "HdlcFrame.h"
+#include "crc.h"
 
 namespace Internal {
 
+//===========================================================================//
+
+
 inline size_t getMinimalPacketSize(uint8_t size)
 {
-    static const uint8_t min_size = 9;
+    static const uint8_t min_size = 10;
 
     if (size == 2)
         return min_size + 1;
@@ -12,20 +16,56 @@ inline size_t getMinimalPacketSize(uint8_t size)
 }
 
 
-inline bool checkHCSandFCS(size_t minimal_size, const QByteArray &data)
-{
-    return false;
-}
+//---------------------------------------------------------------------------//
 
+
+inline bool chekCrc16(const QByteArray &data, size_t size)
+{
+    const char* begin = std::next(data.data());
+    const char* end   = std::next(data.data(), size - 3);
+    const uint16_t crc = hdlc::makeCrc(begin, end);
+
+    const char* tmp = std::next(data.begin(), size - 3);
+    uint16_t orig_crc = 0x0000;
+    orig_crc |= (0xFF & *tmp++) << 8;
+    orig_crc |= 0xFF & *tmp;
+
+    return crc == orig_crc;
 }
 
 
 //---------------------------------------------------------------------------//
 
+
+inline bool checkHCSandFCS(size_t minimal_size, const QByteArray &data)
+{
+    bool result = false;
+
+    if (data.size() >= minimal_size) {
+        result = chekCrc16(data, minimal_size);
+        if (result && data.size() > minimal_size)  {
+            result = chekCrc16(data, data.size());
+        }
+    }
+
+    return result;
+}
+
+
+//===========================================================================//
+
+}
+
+//---------------------------------------------------------------------------//
+
 HdlcFrame::HdlcFrame(uint8_t size)
-    : is_final(true)
-    , is_valid(true)
+    : is_valid(true)
     , addr_size(size)
+    , format(0)
+    , logical_device(0)
+    , device_id(0)
+    , client_id(0)
+    , control(0)
 {}
 
 
@@ -41,19 +81,57 @@ HdlcFrame::HdlcFrame(uint8_t size, const QByteArray &data)
 
 //---------------------------------------------------------------------------//
 
-void HdlcFrame::setData(const QByteArray &data)
+
+void HdlcFrame::setLogicalDevice(uint8_t value)
 {
-    frame_data = data;
+    logical_device = value;
 }
+
 
 //---------------------------------------------------------------------------//
 
 
-QByteArray HdlcFrame::toData() const
+uint16_t HdlcFrame::getLogicalDevice() const
 {
-    QByteArray result;
-    return result;
+    return logical_device;
 }
+
+
+//---------------------------------------------------------------------------//
+
+
+void HdlcFrame::setDeviceid(uint8_t value)
+{
+    device_id = value;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+uint16_t HdlcFrame::getDeviceId() const
+{
+    return device_id;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+void HdlcFrame::setClientId(uint8_t value)
+{
+    client_id = value;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+uint16_t HdlcFrame::getClientId() const
+{
+    return client_id;
+}
+
 
 //---------------------------------------------------------------------------//
 
@@ -69,7 +147,9 @@ bool HdlcFrame::isValid() const
 
 void HdlcFrame::setFinal(bool final)
 {
-    is_final = final;
+    hdlc::Format f{ format };
+    f.s = final;
+    format = f.value;
 }
 
 //---------------------------------------------------------------------------//
@@ -77,7 +157,8 @@ void HdlcFrame::setFinal(bool final)
 
 bool HdlcFrame::isFinal() const
 {
-    return is_final;
+    hdlc::Format f{ format };
+    return f.s == 0;
 }
 
 
@@ -302,12 +383,6 @@ hdlc::ControlType HdlcFrame::type() const
 
 //---------------------------------------------------------------------------//
 
-// DM:
-// 7E A0 08 21 00 41 1F 4D 09 7E
-// UA:
-// 7E A0 1F 00 41 21 93 A1 69 81 80 12 05 01 80 06 01 80 07 04 00 00 00 01 08 04 00 00 00 01 19 A9 7E
-// AARE:
-// 7E A0 38 21 02 41 30 D1 B1 E6 E7 00 61 29 A1 09 06 07 60 85 74 05 08 01 01 A2 03 02 01 00 A3 05 A1 03 02 01 00 BE 10 04 0E 08 00 06 5F 1F 04 00 00 10 10 04 00 00 07 36 E3 7E
 
 bool HdlcFrame::parseFrameData_i(const QByteArray &data)
 {
@@ -324,10 +399,37 @@ bool HdlcFrame::parseFrameData_i(const QByteArray &data)
 
     const char* byte_data = std::next(data.data());
 
+    format |= (0xFF & *byte_data++) << 8;
+    format |=  0xFF & *byte_data++;
 
+    const hdlc::Format f{ format };
+    if (f.size != data.size() - 2 || f.ftype != 0b00001010)
+        return false;
+
+    client_id      |= (0xFF & *byte_data++) >> 1;
+    logical_device |= (0xFF & *byte_data++) >> 1;
+    device_id      |= (0xFF & *byte_data++) >> 1;
+
+    control = *byte_data++;
+
+    if (data.size() > minimal_size)  {
+        frame_info = QByteArray(
+                        std::next(data.begin(), minimal_size - 1),
+                        data.size() - minimal_size - 2);
+    }
 
     return true;
 }
 
 
 //---------------------------------------------------------------------------//
+
+QByteArray HdlcFrame::toData() const
+{
+    QByteArray result;
+    return result;
+}
+
+
+//---------------------------------------------------------------------------//
+
