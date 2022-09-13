@@ -1,6 +1,8 @@
 #include "HdlcConnection.h"
 
 
+#include "HdlcFrame.h"
+
 //---------------------------------------------------------------------------//
 
 HdlcConnection::HdlcConnection(QObject *pObj/* = 0*/)
@@ -92,5 +94,7 @@ void HdlcConnection::proccessReadData_i(const QByteArray &data)
 
 }
 
+
+//---------------------------------------------------------------------------//
 
 
