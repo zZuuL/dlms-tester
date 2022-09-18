@@ -52,6 +52,18 @@ inline bool checkHCSandFCS(size_t minimal_size, const QByteArray &data)
 }
 
 
+inline void addCrc(QByteArray &data)
+{
+    const char* begin = std::next(data.data());
+    const char* end   = std::next(data.data(), data.size() - 1);
+
+    const uint16_t crc = hdlc::makeCrc(begin, end);
+
+    data.append((crc >> 8) & 0xFF);
+    data.append(crc & 0xFF);
+}
+
+
 //===========================================================================//
 
 }
@@ -61,7 +73,7 @@ inline bool checkHCSandFCS(size_t minimal_size, const QByteArray &data)
 HdlcFrame::HdlcFrame(uint8_t size)
     : is_valid(true)
     , addr_size(size)
-    , format(0)
+    , format(0xA000)
     , logical_device(0)
     , device_id(0)
     , client_id(0)
@@ -112,6 +124,24 @@ void HdlcFrame::setDeviceid(uint8_t value)
 uint16_t HdlcFrame::getDeviceId() const
 {
     return device_id;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+void HdlcFrame::setControl(uint8_t data)
+{
+    control = data;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+uint8_t HdlcFrame::getControl() const
+{
+    return control;
 }
 
 
@@ -181,8 +211,6 @@ QByteArray HdlcFrame::getInfo() const
 
 hdlc::ControlType HdlcFrame::type() const
 {
-    unsigned  char control = 0x00;
-
     struct ControlByte  {
         uint8_t b1 : 1;
         uint8_t b2 : 1;
@@ -427,6 +455,28 @@ bool HdlcFrame::parseFrameData_i(const QByteArray &data)
 QByteArray HdlcFrame::toData() const
 {
     QByteArray result;
+
+    hdlc::Format f{ format };
+    f.size = Internal::getMinimalPacketSize(addr_size) + frame_info.size() - 2;
+
+    result.append(hdlc::Flag);
+    result.append(f.hi);
+    result.append(f.lo);
+    result.append(client_id);
+    result.append(logical_device);
+    result.append(device_id);
+    result.append(control);
+
+    Internal::addCrc(result);
+
+    if (!frame_info.isEmpty())
+    {
+        result.append(frame_info);
+        Internal::addCrc(result);
+    }
+
+    result.append(hdlc::Flag);
+
     return result;
 }
 

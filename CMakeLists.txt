@@ -21,7 +21,7 @@ file(GLOB SOURCES
     ui/*.ui
 )
 
-add_executable (${PROJECT_NAME} ${SOURCES})
+add_executable (${PROJECT_NAME} WIN32 ${SOURCES})
 
 find_package(Qt5 CONFIG REQUIRED COMPONENTS
     Widgets

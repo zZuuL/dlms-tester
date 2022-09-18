@@ -12,9 +12,12 @@
 class HdlcConnection : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit HdlcConnection(QObject *pObj = 0);
+    explicit HdlcConnection(int id, QObject *pObj = 0);
     void setSettings(const DeviceSetting &setting);
+    bool connect();
+    bool disconnect();
 
 private:
     bool readDataFromSocket_i(QByteArray &data);

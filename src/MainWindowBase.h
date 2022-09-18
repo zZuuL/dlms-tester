@@ -15,26 +15,22 @@ class MainWindowBase : public QMainWindow
 {
     Q_OBJECT
 
-    const int SettingDataRole = Qt::UserRole + 1;
-
 public:
     explicit MainWindowBase(QWidget *pWgt = 0);
 
     virtual bool init() = 0;
     virtual bool fini() = 0;
-    virtual bool changeDeviceSetting(DeviceSetting &device_setting) = 0;
+    virtual void add() = 0;
+    virtual void modify() = 0;
+    virtual void remove() = 0;
     virtual bool connect() = 0;
     virtual bool disconnect() = 0;
 
+    QTreeWidget* devicesTreeWidget() const;
+
 protected:
     bool isChanged() const;
-
     void closeEvent(QCloseEvent *event) override;
-    bool getActiveDevice(DeviceSetting &setting) const;
-    QList<DeviceSetting> getDeviceScheme() const;
-
-private:
-    void setDeviceSettingItem_i(const DeviceSetting &setting, QTreeWidgetItem* item);
 
 private slots:
     void actionHandler(const QAction* action);
@@ -42,10 +38,8 @@ private slots:
 
 
 protected:
-    Ui::MainWindow ui_{};
+    Ui::MainWindow ui_;
     QActionGroup   actions_;
-
-    bool           changed;
 };
 
 

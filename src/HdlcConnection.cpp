@@ -5,7 +5,7 @@
 
 //---------------------------------------------------------------------------//
 
-HdlcConnection::HdlcConnection(QObject *pObj/* = 0*/)
+HdlcConnection::HdlcConnection(int id, QObject *pObj/* = 0*/)
     : QObject(pObj)
     , logic_device(1)
     , address_size(1)
@@ -36,6 +36,24 @@ void HdlcConnection::setSettings(const DeviceSetting &setting)
     send_window_size   = setting.send_window_size;
     send_keep_alive    = setting.send_keep_alive;
     inactivity_timeout = setting.inactivity_timeout;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+bool HdlcConnection::connect()
+{
+    return false;
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+bool HdlcConnection::disconnect()
+{
+    return false;
 }
 
 

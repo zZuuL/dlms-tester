@@ -4,7 +4,16 @@
 #include <QDebug>
 #include <QMessageBox>
 
+
+#include <QFileDialog>
+
 #include "HdlcFrame.h"
+#include "HdlcConnection.h"
+#include "XmlSchemeControl.h"
+
+
+Q_DECLARE_METATYPE(DeviceSetting)
+//Q_DECLARE_METATYPE(HdlcConnection)
 
 
 //---------------------------------------------------------------------------//
@@ -29,6 +38,7 @@
 
 MainWindow::MainWindow(QWidget *pWgt /*= nullptr*/)
     : MainWindowBase(pWgt)
+    , devises_changed(false)
 {
     QByteArray ba;
     //ba.append((char)0x7E);
@@ -43,79 +53,82 @@ MainWindow::MainWindow(QWidget *pWgt /*= nullptr*/)
     //ba.append((char)0x7E);
 
 
-    //ba.append((char)0x7E); 
-    //ba.append((char)0xA0); 
-    //ba.append((char)0x38); 
-    //ba.append((char)0x21); 
-    //ba.append((char)0x02); 
-    //ba.append((char)0x41); 
-    //ba.append((char)0x30); 
-    //ba.append((char)0xD1); 
-    //ba.append((char)0xB1); 
-    //ba.append((char)0xE6); 
-    //ba.append((char)0xE7);
-    //ba.append((char)0x00); 
-    //ba.append((char)0x61); 
-    //ba.append((char)0x29); 
-    //ba.append((char)0xA1); 
-    //ba.append((char)0x09); 
-    //ba.append((char)0x06); 
-    //ba.append((char)0x07); 
-    //ba.append((char)0x60); 
-    //ba.append((char)0x85); 
-    //ba.append((char)0x74); 
-    //ba.append((char)0x05); 
-    //ba.append((char)0x08); 
-    //ba.append((char)0x01); 
-    //ba.append((char)0x01); 
-    //ba.append((char)0xA2); 
-    //ba.append((char)0x03); 
-    //ba.append((char)0x02); 
-    //ba.append((char)0x01); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0xA3); 
-    //ba.append((char)0x05); 
-    //ba.append((char)0xA1); 
-    //ba.append((char)0x03); 
-    //ba.append((char)0x02); 
-    //ba.append((char)0x01); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0xBE); 
-    //ba.append((char)0x10); 
-    //ba.append((char)0x04); 
-    //ba.append((char)0x0E); 
-    //ba.append((char)0x08); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0x06); 
-    //ba.append((char)0x5F); 
-    //ba.append((char)0x1F); 
-    //ba.append((char)0x04); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0x10); 
-    //ba.append((char)0x10); 
-    //ba.append((char)0x04); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0x00); 
-    //ba.append((char)0x07); 
-    //ba.append((char)0x36); 
-    //ba.append((char)0xE3); 
-    //ba.append((char)0x7E);
-
-
-    ba.append((char)0x7e); 
-    ba.append((char)0xa0); 
-    ba.append((char)0x08); 
+    ba.append((char)0x7E); 
+    ba.append((char)0xA0); 
+    ba.append((char)0x38); 
     ba.append((char)0x21); 
     ba.append((char)0x02); 
-    ba.append((char)0x65); 
-    ba.append((char)0x1f); 
-    ba.append((char)0xa6); 
-    ba.append((char)0xf8); 
-    ba.append((char)0x7e);
+    ba.append((char)0x41); 
+    ba.append((char)0x30); 
+    ba.append((char)0xD1); 
+    ba.append((char)0xB1); 
+    ba.append((char)0xE6); 
+    ba.append((char)0xE7);
+    ba.append((char)0x00); 
+    ba.append((char)0x61); 
+    ba.append((char)0x29); 
+    ba.append((char)0xA1); 
+    ba.append((char)0x09); 
+    ba.append((char)0x06); 
+    ba.append((char)0x07); 
+    ba.append((char)0x60); 
+    ba.append((char)0x85); 
+    ba.append((char)0x74); 
+    ba.append((char)0x05); 
+    ba.append((char)0x08); 
+    ba.append((char)0x01); 
+    ba.append((char)0x01); 
+    ba.append((char)0xA2); 
+    ba.append((char)0x03); 
+    ba.append((char)0x02); 
+    ba.append((char)0x01); 
+    ba.append((char)0x00); 
+    ba.append((char)0xA3); 
+    ba.append((char)0x05); 
+    ba.append((char)0xA1); 
+    ba.append((char)0x03); 
+    ba.append((char)0x02); 
+    ba.append((char)0x01); 
+    ba.append((char)0x00); 
+    ba.append((char)0xBE); 
+    ba.append((char)0x10); 
+    ba.append((char)0x04); 
+    ba.append((char)0x0E); 
+    ba.append((char)0x08); 
+    ba.append((char)0x00); 
+    ba.append((char)0x06); 
+    ba.append((char)0x5F); 
+    ba.append((char)0x1F); 
+    ba.append((char)0x04); 
+    ba.append((char)0x00); 
+    ba.append((char)0x00); 
+    ba.append((char)0x10); 
+    ba.append((char)0x10); 
+    ba.append((char)0x04); 
+    ba.append((char)0x00); 
+    ba.append((char)0x00); 
+    ba.append((char)0x07); 
+    ba.append((char)0x36); 
+    ba.append((char)0xE3); 
+    ba.append((char)0x7E);
+
+
+    //ba.append((char)0x7e); 
+    //ba.append((char)0xa0); 
+    //ba.append((char)0x08); 
+    //ba.append((char)0x21); 
+    //ba.append((char)0x02); 
+    //ba.append((char)0x65); 
+    //ba.append((char)0x1f); 
+    //ba.append((char)0xa6); 
+    //ba.append((char)0xf8); 
+    //ba.append((char)0x7e);
 
 
     HdlcFrame f(1, ba);
+
+    ba = f.toData();
+
 }
 
 
@@ -133,7 +146,7 @@ bool MainWindow::init()
 
 bool MainWindow::fini()
 {
-    if (MainWindowBase::isChanged())
+    if (MainWindowBase::devicesTreeWidget()->topLevelItemCount() > 0 && devises_changed)
     {
         const QMessageBox::StandardButton button = QMessageBox::question(
                 this,
@@ -145,7 +158,29 @@ bool MainWindow::fini()
 
         if (button == QMessageBox::Save)
         {
-            const QList<DeviceSetting> setting_s = MainWindowBase::getDeviceScheme();
+
+            QList<DeviceSetting> DeviceSetting_s;
+
+            QTreeWidget* tw = MainWindowBase::devicesTreeWidget();
+            for (int i = 0; i != tw->topLevelItemCount(); ++i)
+            {
+                QTreeWidgetItem* item = tw->topLevelItem(i);
+                DeviceSetting_s << item->data(0, SettingDataRole).value<DeviceSetting>();
+            }
+
+            if (!DeviceSetting_s.empty())
+            {
+                const QString scheme_file = QFileDialog::getSaveFileName(
+                                                this,
+                                                QString("Save"),
+                                                QString("."),
+                                                QString("*.xml"));
+                if (!scheme_file.isEmpty())
+                {
+                    XmlSchemeControl xml(scheme_file);
+                    xml.save(DeviceSetting_s);
+                }
+            }
         }
     }
 
@@ -156,32 +191,103 @@ bool MainWindow::fini()
 //---------------------------------------------------------------------------//
 
 
-bool MainWindow::changeDeviceSetting(DeviceSetting &device_setting)
+void MainWindow::add()
 {
-    DeviceSetupDialog setting_dialog(this, device_setting);
-    bool result = setting_dialog.exec() == QDialog::Accepted;
-    if (result)
-        device_setting = setting_dialog.get();
-    return result;
+    DeviceSetupDialog setting_dialog(this);
+
+    if (setting_dialog.exec() == QDialog::Accepted)
+    {
+        QTreeWidget* tw = MainWindowBase::devicesTreeWidget();
+
+        const DeviceSetting settings = setting_dialog.get();
+
+        QTreeWidgetItem* item = new QTreeWidgetItem(tw);
+        item->setText(0, QString::fromStdString(settings.name));
+        item->setData(0, SettingDataRole, QVariant::fromValue(settings));
+
+        int connection_id = connection_pool.addConnection(settings);
+        item->setData(0, ConnectionRole, connection_id);
+
+        tw->setCurrentItem(item);
+
+        devises_changed = true;
+    }
 }
 
+
 //---------------------------------------------------------------------------//
+
+
+void MainWindow::modify()
+{  
+    QTreeWidgetItem* current_item = MainWindowBase::devicesTreeWidget()->currentItem();
+    if (current_item != nullptr)
+    {
+        DeviceSetting setting = current_item->data(0, SettingDataRole).value<DeviceSetting>();
+        DeviceSetupDialog setting_dialog(this, setting);
+        if (setting_dialog.exec() == QDialog::Accepted)
+        {
+            setting = setting_dialog.get();
+            current_item->setText(0, QString::fromStdString(setting.name));
+            current_item->setData(0, SettingDataRole, QVariant::fromValue(setting));
+
+            int connection_id = current_item->data(0, ConnectionRole).value<int>();
+            connection_pool.modifyConnection(connection_id, setting);
+
+            devises_changed = true;
+        }
+    }
+}
+
+
+//---------------------------------------------------------------------------//
+
+
+void MainWindow::remove()
+{
+    QTreeWidgetItem* current_item = MainWindowBase::devicesTreeWidget()->currentItem();
+    if (current_item != nullptr)
+    {
+        DeviceSetting setting = current_item->data(0, SettingDataRole).value<DeviceSetting>();
+        const QMessageBox::StandardButton button = QMessageBox::question(
+                    this,
+                    QString("Remove"),
+                    QString("Are you sure what you want remove device: %1").arg(QString::fromStdString(setting.name)),
+                    QMessageBox::Yes | QMessageBox::No,
+                    QMessageBox::No);
+
+        if (button == QMessageBox::StandardButton::Yes)
+        {
+            int connection_id = current_item->data(0, ConnectionRole).value<int>();
+            connection_pool.removeConnection(connection_id);
+            delete current_item;
+        }
+    }
+
+    devises_changed = true;
+}
+
+
+//---------------------------------------------------------------------------//
+
 
 bool MainWindow::connect()
 {
-    DeviceSetting setting;
-    if (MainWindowBase::getActiveDevice(setting))
-    {
-
-    }
-    return false;
+    QTreeWidgetItem* current_item = MainWindowBase::devicesTreeWidget()->currentItem();
+    int connection_id = current_item->data(0, ConnectionRole).value<int>();
+    return connection_pool.connect(connection_id);
 }
+
 
 //---------------------------------------------------------------------------//
 
+
 bool MainWindow::disconnect()
 {
-    return false;
+    QTreeWidgetItem* current_item = MainWindowBase::devicesTreeWidget()->currentItem();
+    int connection_id = current_item->data(0, ConnectionRole).value<int>();
+    return connection_pool.disconnect(connection_id);
 }
+
 
 //---------------------------------------------------------------------------//
